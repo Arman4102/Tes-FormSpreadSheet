@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vodcast Keren</title>
+  </head>
+  <body>
+    <h1>HAllooowwwwww</h1>
+    <form
+      name="form"
+    >
+      <input name="nama" id="nama" type="nama" placeholder="Nama" required />
+      <input name="lagu" id="lagu" type="text" placeholder="Lagu" required />
+      <button type="submit">Send</button>
+    </form>
+  </body>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwpbrGU9O267069K9OClGtwQ34FzWmGZzqkpLJCyg9J3QtfX2dvRRHNGxy14yhCv1E0/exec";
+    const form = document.forms["form"];
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      fetch(scriptURL, { method: "POST", body: new FormData(form) })
+        .then((response) => console.log("Success!", response))
+        .catch((error) => console.error("Error!", error.message));
+    });
+  </script>
+</html>
