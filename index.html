@@ -1,41 +1,76 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Form to Spreadsheet</title>
-</head>
-<body>
-  <h2>Form Masuk Spreadsheet</h2>
-  <form id="myForm">
-    <input type="text" name="nama" placeholder="Nama" required><br>
-    <input type="email" name="email" placeholder="Email" required><br>
-    <button type="submit">Kirim</button>
-  </form>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form to Spreadsheet</title>
+  </head>
+  <body>
+    <h2>Form Masuk Spreadsheet</h2>
+    <form id="myForm" name="submit-to-google-sheet">
+      <input type="text" name="nama" placeholder="Nama" required /><br />
+      <input type="email" name="email" placeholder="Email" required /><br />
+      <input type="text" name="pesan" placeholder="Lagu kalian" required /><br />
+      <button type="submit">Kirim</button>
+    </form>
 
-  <script>
-    document.getElementById("myForm").addEventListener("submit", function(e) {
-      e.preventDefault();
+    <script>
+      const scriptURL = "https://script.google.com/macros/s/AKfycbwfHCBTxQomFTyK7lFSB0PbvUipMu9JebI9k5IH_sKW1L000ZHQCAhRTvQdLrVL1Qf2/exec";
+      const form = document.forms["submit-to-google-sheet"];
 
-      const nama = e.target.nama.value;
-      const email = e.target.email.value;
-
-      fetch("https://script.google.com/macros/s/AKfycbxVY5flQYph1LbHhAIHtJUZC3QeGPhuIDL8P8Ypwh9amcwkWKiiAxAaUPqtctvUIcOr/exec", {
-        method: "POST",
-        body: JSON.stringify({ nama, email }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then(res => res.json())
-      .then(data => {
-        alert("Data berhasil dikirim!");
-        e.target.reset();
-      })
-      .catch(err => {
-        alert("Gagal mengirim data.");
-        console.error(err);
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => console.log("Success!", response))
+          .catch((error) => console.error("Error!", error.message));
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      input,
+      button {
+        margin: 5px 0;
+        width: 100%;
+        padding: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Request Lagu</h2>
+    <form id="requestForm" name="submit">
+      <input type="text" name="nama" placeholder="Nama Kamu" required />
+      <input type="text" name="kelas" placeholder="Kelas + Jurusan" required />
+      <input type="text" name="judul" placeholder="Mau Request Apa?" required />
+      <input
+        type="text"
+        name="pesan"
+        placeholder="Mau nambahin pesan?"
+        required
+      />
+      <button type="submit">Kirim</button>
+    </form>
+    <p id="respon"></p>
+
+    <script>
+      const scriptURL =
+        "https://script.google.com/macros/s/AKfycbzzlKZK7s2WJo1U9XXZGcyhO50xPy16GDGplmRyC3F73gFG9MvJ_nc3AYURjnvgLsWE/exec";
+      const form = document.forms["submit"];
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        fetch(scriptURL, { method: "POST", body: new FormData(form) })
+          .then((response) => console.log("Success!", response))
+          .catch((error) => console.error("Error!", error.message));
+      });
+    </script>
+  </body>
 </html>
