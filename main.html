@@ -7,9 +7,8 @@
   </head>
   <body>
     <h1>HAllooowwwwww</h1>
-    <form
-      name="form"
-    >
+    <form name="form">
+      <input type="text" name="Date" id="date" hidden />
       <input name="Nama" id="nama" type="nama" placeholder="Nama" required />
       <input name="Lagu" id="lagu" type="text" placeholder="Lagu" required />
       <button type="submit">Send</button>
@@ -17,11 +16,28 @@
   </body>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbwpbrGU9O267069K9OClGtwQ34FzWmGZzqkpLJCyg9J3QtfX2dvRRHNGxy14yhCv1E0/exec";
+    const scriptURL =
+      "https://script.google.com/macros/s/AKfycbwpbrGU9O267069K9OClGtwQ34FzWmGZzqkpLJCyg9J3QtfX2dvRRHNGxy14yhCv1E0/exec";
     const form = document.forms["form"];
+    const dateInput = document.getElementById("date");
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
+
+      // Ambil waktu sekarang
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, "0");
+      const dd = String(now.getDate()).padStart(2, "0");
+      const hh = String(now.getHours()).padStart(2, "0");
+      const min = String(now.getMinutes()).padStart(2, "0");
+
+      // Set nilainya ke input hidden
+      dateInput.value = `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+
+      console.log("Tanggal yang dikirim:", dateInput.value); // Debug log
+
+      // Submit form
       fetch(scriptURL, { method: "POST", body: new FormData(form) })
         .then((response) => console.log("Success!", response))
         .catch((error) => console.error("Error!", error.message));
