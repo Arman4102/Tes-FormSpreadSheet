@@ -66,7 +66,7 @@
 
       fetch(scriptURL, { method: "POST", body: new FormData(form) })
         .then(() => {
-          alert("✅ Data berhasil dikirim!");
+          alert("✅ Request berhasil dikirim!");
           form.reset(); 
         })
         .catch((error) => {
