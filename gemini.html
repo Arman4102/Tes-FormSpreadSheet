@@ -1,45 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Test Gemini Lagu</title>
-</head>
-<body>
-  <h2>Cek Lagu Pakai Gemini AI</h2>
-  <input type="text" id="lagu" placeholder="Judul Lagu" />
-  <button onclick="cek()">Cek Lagu</button>
-  <pre id="hasil"></pre>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Gemini Lagu</title>
+  </head>
+  <body>
+    <h2>Cek Lagu Pakai Gemini AI</h2>
+    <input type="text" id="lagu" placeholder="Judul Lagu" />
+    <input type="text" id="artist" placeholder="artist" />
+    <button onclick="cek()">Cek Lagu</button>
+    <pre id="hasil"></pre>
 
-  <script>
-    const GEMINI_API_KEY = "AIzaSyCAC9o0F-8jwueQ2N1P1YyOPaviqjwghPY";
+    <script>
+      const GEMINI_API_KEY = "AIzaSyCAC9o0F-8jwueQ2N1P1YyOPaviqjwghPY";
 
-    async function cekLaguDenganGemini(namaLagu) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-      const prompt = `Apakah lagu berjudul "${namaLagu}" layak untuk diputar di sekolah? Jawab dengan "Layak karena ..." atau "Tidak layak karena ..."`;
+      async function cekLaguDenganGemini(namaLagu, artist) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const prompt = `Apakah lagu berjudul "${namaLagu}" dengan artist/band ${artist}layak untuk diputar di sekolah? Jawab dengan "Layak karena ..." atau "Tidak layak karena ...". 
+        Penilaian didasarkan pada kriteria bahwa lagu tersebut akan diputar saat jam istirahat sebagai hiburan siswa, sehingga tidak perlu terlalu ketat 
+        namun tetap menjaga norma sekolah. Hanya lagu dengan genre ringan dan positif seperti pop, akustik, jazz, instrumental, R&B ringan, atau K-Pop yang 
+        sopan yang diperbolehkan. Lagu tidak boleh mengandung kata kasar, unsur pornografi, ujaran kebencian, kekerasan, diskriminasi, maupun tema negatif 
+        seperti narkoba dan kriminalitas. Selain itu, lagu bergenre DJ remix yang berlebihan atau Death Metal juga tidak diperbolehkan.`;
 
-      const body = {
-        contents: [{ parts: [{ text: prompt }] }],
-      };
+        const body = {
+          contents: [{ parts: [{ text: prompt }] }],
+        };
 
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
 
-      const data = await response.json();
-      return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Gagal mendapatkan jawaban dari AI.";
-    }
+        const data = await response.json();
+        return (
+          data.candidates?.[0]?.content?.parts?.[0]?.text ??
+          "Gagal mendapatkan jawaban dari AI."
+        );
+      }
 
-    async function cek() {
-      const lagu = document.getElementById("lagu").value;
-      const hasil = await cekLaguDenganGemini(lagu);
-      document.getElementById("hasil").innerText = hasil;
-      console.log("Hasil dari Gemini:\n", hasil);
-    }
-  </script>
-</body>
+      async function cek() {
+        const lagu = document.getElementById("lagu").value;
+        const artist = document.getElementById("artist").value;
+        const hasil = await cekLaguDenganGemini(lagu, artist);
+        document.getElementById("hasil").innerText = hasil;
+        console.log("Hasil dari Gemini:\n", hasil);
+      }
+    </script>
+  </body>
 </html>
