@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Test Gemini Lagu</title>
+</head>
+<body>
+  <h2>Cek Lagu Pakai Gemini AI</h2>
+  <input type="text" id="lagu" placeholder="Judul Lagu" />
+  <button onclick="cek()">Cek Lagu</button>
+  <pre id="hasil"></pre>
+
+  <script>
+    const GEMINI_API_KEY = "AIzaSyCAC9o0F-8jwueQ2N1P1YyOPaviqjwghPY";
+
+    async function cekLaguDenganGemini(namaLagu) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+      const prompt = `Apakah lagu berjudul "${namaLagu}" layak untuk diputar di sekolah? Jawab dengan "Layak karena ..." atau "Tidak layak karena ..."`;
+
+      const body = {
+        contents: [{ parts: [{ text: prompt }] }],
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Gagal mendapatkan jawaban dari AI.";
+    }
+
+    async function cek() {
+      const lagu = document.getElementById("lagu").value;
+      const hasil = await cekLaguDenganGemini(lagu);
+      document.getElementById("hasil").innerText = hasil;
+      console.log("Hasil dari Gemini:\n", hasil);
+    }
+  </script>
+</body>
+</html>

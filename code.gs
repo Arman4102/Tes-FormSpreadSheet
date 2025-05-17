@@ -5,7 +5,7 @@ function intialSetup () {
   var activeSpreadsheet = SpreadsheetApp.getActiveSpreadsheet()
   scriptProp.setProperty('key', activeSpreadsheet.getId())
 }
-
+  
 function doPost (e) {
   var lock = LockService.getScriptLock()
   lock.tryLock(10000)

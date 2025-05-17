@@ -9,22 +9,49 @@
     <h1>HAllooowwwwww</h1>
     <form name="form">
       <input type="text" name="Date" id="date" hidden />
-      <input name="Nama" id="nama" type="nama" placeholder="Nama" required />
+      <input type="text" name="Filter" id="filter" hidden />
+      <input name="Nama" id="nama" type="text" placeholder="Nama" required />
       <input name="Lagu" id="lagu" type="text" placeholder="Lagu" required />
       <button type="submit">Send</button>
     </form>
   </body>
 
   <script>
-    const scriptURL =
-      "https://script.google.com/macros/s/AKfycbwpbrGU9O267069K9OClGtwQ34FzWmGZzqkpLJCyg9J3QtfX2dvRRHNGxy14yhCv1E0/exec";
+    const GEMINI_API_KEY = "AIzaSyCAC9o0F-8jwueQ2N1P1YyOPaviqjwghPY";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwpbrGU9O267069K9OClGtwQ34FzWmGZzqkpLJCyg9J3QtfX2dvRRHNGxy14yhCv1E0/exec";
+
     const form = document.forms["form"];
     const dateInput = document.getElementById("date");
+    const filterInput = document.getElementById("filter");
+    const laguInput = document.getElementById("lagu");
 
-    form.addEventListener("submit", (e) => {
+    async function cekLaguDenganGemini(namaLagu) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+      const prompt = `Apakah lagu berjudul "${namaLagu}" layak untuk diputar di sekolah? Jawab dengan "Layak karena ..." atau "Tidak layak karena ..."`;
+
+      const body = {
+        contents: [{ parts: [{ text: prompt }] }],
+      };
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+
+        const data = await response.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "Gagal mendapatkan jawaban dari AI.";
+      } catch (error) {
+        return "Gagal koneksi ke AI.";
+      }
+    }
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Ambil waktu sekarang
       const now = new Date();
       const yyyy = now.getFullYear();
       const mm = String(now.getMonth() + 1).padStart(2, "0");
@@ -32,15 +59,19 @@
       const hh = String(now.getHours()).padStart(2, "0");
       const min = String(now.getMinutes()).padStart(2, "0");
 
-      // Set nilainya ke input hidden
       dateInput.value = `${yyyy}-${mm}-${dd} ${hh}:${min}`;
 
-      console.log("Tanggal yang dikirim:", dateInput.value); // Debug log
+      const hasilAI = await cekLaguDenganGemini(laguInput.value);
+      filterInput.value = hasilAI;
 
-      // Submit form
       fetch(scriptURL, { method: "POST", body: new FormData(form) })
-        .then((response) => console.log("Success!", response))
-        .catch((error) => console.error("Error!", error.message));
+        .then(() => {
+          alert("✅ Data berhasil dikirim!");
+          form.reset(); 
+        })
+        .catch((error) => {
+          alert("❌ Gagal mengirim data: " + error.message);
+        });
     });
   </script>
 </html>
