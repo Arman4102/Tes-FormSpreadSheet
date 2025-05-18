@@ -15,17 +15,18 @@ const dateInput = document.getElementById("date");
 const filterInput = document.getElementById("filter");
 const laguInput = document.getElementById("lagu");
 const artisInput = document.getElementById("artist");
-const genreInput = document.getElementById("genre");
+const tipeInput = document.getElementById("tipe");
+const linkInput = document.getElementById("link");
 const loader = document.getElementById("loader");
 
-async function cekLaguDenganGemini(namaLagu, artist, genre) {
+async function cekLaguDenganGemini(namaLagu, artist, tipe, link) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-  const prompt = `Apakah lagu berjudul "${namaLagu}" dengan artist/band ${artist} dan genre ${genre} layak untuk diputar di sekolah saat jam istirahat? Jawab dengan "Layak karena ..." atau "Tidak layak karena ...". 
+  const prompt = `Apakah lagu berjudul "${namaLagu}" dengan artist/band ${artist} dan tipe ${tipe} jika ada link music tersebut ${link} periksa lyricnya lalu lalu cek layak untuk diputar di sekolah saat jam istirahat? Jawab dengan "Layak karena ..." atau "Tidak layak karena ...". 
 
 Pertimbangkan bahwa:
 - Lagu akan diputar saat jam istirahat sebagai hiburan siswa.
 - Sebagian besar siswa adalah pelajar Indonesia dan tidak memahami lirik berbahasa Inggris secara mendalam, kecuali kata-kata kasar yang sangat umum diketahui seperti "fuck", "bitch", dsb.
-- Lagu boleh bergenre apapun selama tidak mengandung lirik eksplisit secara jelas, termasuk kekerasan ekstrem, pornografi, ujaran kebencian, atau tema negatif seperti narkoba.
+- Lagu boleh bertipe apapun selama tidak mengandung lirik eksplisit secara jelas, termasuk kekerasan ekstrem, pornografi, ujaran kebencian, atau tema negatif seperti narkoba.
 - Genre seperti pop punk, rock ringan, R&B modern, atau K-Pop juga boleh jika energinya masih cocok untuk suasana sekolah.
 - Penilaian tidak perlu terlalu ketat dan mempertimbangkan popularitas lagu di kalangan pelajar.
 
@@ -70,7 +71,8 @@ form.addEventListener("submit", async (e) => {
   const hasilAI = await cekLaguDenganGemini(
     laguInput.value,
     artisInput.value,
-    genreInput.value
+    tipeInput.value,
+    linkInput.value,
   );
   filterInput.value = hasilAI;
 
