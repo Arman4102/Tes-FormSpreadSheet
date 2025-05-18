@@ -1,3 +1,11 @@
+// Tampilkan modal saat halaman dimuat
+document.addEventListener("DOMContentLoaded", function () {
+  var announcementModal = new bootstrap.Modal(
+    document.getElementById("announcementModal")
+  );
+  announcementModal.show();
+});
+
 const GEMINI_API_KEY = "AIzaSyCAC9o0F-8jwueQ2N1P1YyOPaviqjwghPY";
 const scriptURL =
   "https://script.google.com/macros/s/AKfycbwpbrGU9O267069K9OClGtwQ34FzWmGZzqkpLJCyg9J3QtfX2dvRRHNGxy14yhCv1E0/exec";
