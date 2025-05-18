@@ -19,6 +19,10 @@ const tipeInput = document.getElementById("tipe");
 const linkInput = document.getElementById("link");
 const loader = document.getElementById("loader");
 
+    // linkInput.addEventListener('focus', function() {
+    //     this.placeholder = "Wajib isi kalau request cover/remix atau versi tertentu";
+    // });
+
 async function cekLaguDenganGemini(namaLagu, artist, tipe, link) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
   const prompt = `Apakah lagu berjudul "${namaLagu}" dengan artist/band ${artist} dan tipe ${tipe} jika ada link music tersebut ${link} periksa lyricnya lalu lalu cek layak untuk diputar di sekolah saat jam istirahat? Jawab dengan "Layak karena ..." atau "Tidak layak karena ...". 
