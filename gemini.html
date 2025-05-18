@@ -13,15 +13,53 @@
     <pre id="hasil"></pre>
 
     <script>
+      const GENIUS_ACCESS_TOKEN =
+        "nyO0N7Rn3hpR8a2Y5os-tnm-fszEazeLN-YSZsONqMGEgCQ1EW7qLietSUs2hlF5";
+
+      async function searchGenius(title, artist) {
+        const query = encodeURIComponent(`${title} ${artist}`);
+        const response = await fetch(
+          `https://api.genius.com/search?q=${query}`,
+          {
+            headers: {
+              Authorization: GENIUS_ACCESS_TOKEN,
+            },
+          }
+        );
+
+        const data = await response.json();
+        const hit = data.response.hits.find((h) =>
+          h.result.primary_artist.name
+            .toLowerCase()
+            .includes(artist.toLowerCase())
+        );
+        return hit?.result?.url; // URL ke halaman lirik Genius
+      }
+
+      async function getLyricsFromGeniusUrl(url) {
+        const html = await (
+          await fetch(
+            `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
+          )
+        ).json();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html.contents, "text/html");
+        const lyrics = doc.querySelector(
+          "div[data-lyrics-container]"
+        )?.innerText;
+        return lyrics || "Lirik tidak ditemukan";
+      }
+
       const GEMINI_API_KEY = "AIzaSyCAC9o0F-8jwueQ2N1P1YyOPaviqjwghPY";
 
       async function cekLaguDenganGemini(namaLagu, artist) {
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-        const prompt = `Apakah lagu berjudul "${namaLagu}" dengan artist/band ${artist}layak untuk diputar di sekolah? Jawab dengan "Layak karena ..." atau "Tidak layak karena ...". 
-        Penilaian didasarkan pada kriteria bahwa lagu tersebut akan diputar saat jam istirahat sebagai hiburan siswa, sehingga tidak perlu terlalu ketat 
-        namun tetap menjaga norma sekolah. Hanya lagu dengan genre ringan dan positif seperti pop, akustik, jazz, instrumental, R&B ringan, atau K-Pop yang 
-        sopan yang diperbolehkan. Lagu tidak boleh mengandung kata kasar, unsur pornografi, ujaran kebencian, kekerasan, diskriminasi, maupun tema negatif 
-        seperti narkoba dan kriminalitas. Selain itu, lagu bergenre DJ remix yang berlebihan atau Death Metal juga tidak diperbolehkan.`;
+        const prompt = `
+Cek apakah lagu berjudul "${namaLagu}" oleh artist ${artist}: ${lirik} diputar di lingkungan sekolah berdasarkan isi liriknya. Jawab dengan salah satu:
+- "Layak karena ..." jika isinya baik, sopan, dan mendidik.
+- "Tidak layak karena ..." jika mengandung kekerasan, kata-kata kasar, hal negatif, atau tidak sesuai norma sekolah.
+Jika kamu tidak dapat menemukan informasi tentang lagu ini, jawab dengan: "Lagu tidak ditemukan atau tidak cukup informasi."
+`;
 
         const body = {
           contents: [{ parts: [{ text: prompt }] }],
