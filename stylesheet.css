@@ -101,9 +101,8 @@ body::before {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Custom Dropdown Styling */
 .radio-form select {
-    appearance: none; /* Remove default styling */
+    appearance: none; 
     -webkit-appearance: none;
     -moz-appearance: none;
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M1 4l5 5 5-5z' fill='%23f0f0f0'/%3E%3C/svg%3E");
@@ -117,7 +116,6 @@ body::before {
     box-shadow: none;
 }
 
-/* Dropdown Options */
 .radio-form select option {
     background-color: #493d33;
     color: #f0f0f0;
@@ -129,9 +127,7 @@ body::before {
     color: #493d33;
 }
 
-/* Dropdown Floating Panel */
 @supports (-webkit-touch-callout: none) {
-    /* Webkit-specific styles for iOS/Safari */
     .radio-form select option {
         background-color: #ffffff;
         color: #000000;
@@ -139,7 +135,7 @@ body::before {
 }
 
 #loader {
-  display: none; /* default: disembunyikan */
+  display: none; 
   padding: 20px;
   border-radius: 12px;
   background: #f8f9fa;
@@ -161,7 +157,6 @@ body::before {
   margin-top: 12px;
 }
 
-/* Animasi muncul */
 @keyframes fadeIn {
   from {
     opacity: 0;

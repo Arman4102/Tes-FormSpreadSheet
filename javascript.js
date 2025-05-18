@@ -1,4 +1,3 @@
-// Tampilkan modal saat halaman dimuat
 document.addEventListener("DOMContentLoaded", function () {
   var announcementModal = new bootstrap.Modal(
     document.getElementById("announcementModal")
@@ -61,7 +60,7 @@ Jika tidak mengetahui lagu tersebut berikan jawaban dengan "Tidak Ada Informasi"
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  loader.style.display = "block"; // Tampilkan loader
+  loader.style.display = "block"; 
 
   const now = new Date();
   const yyyy = now.getFullYear();
@@ -89,6 +88,6 @@ form.addEventListener("submit", async (e) => {
       alert("❌ Gagal mengirim data: " + error.message);
     })
     .finally(() => {
-      loader.style.display = "none"; // Sembunyikan loader setelah semua selesai
+      loader.style.display = "none"; 
     });
 });
