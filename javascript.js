@@ -18,9 +18,9 @@ const tipeInput = document.getElementById("tipe");
 const linkInput = document.getElementById("link");
 const loader = document.getElementById("loader");
 
-    // linkInput.addEventListener('focus', function() {
-    //     this.placeholder = "Wajib isi kalau request cover/remix atau versi tertentu";
-    // });
+// linkInput.addEventListener('focus', function() {
+//     this.placeholder = "Wajib isi kalau request cover/remix atau versi tertentu";
+// });
 
 async function cekLaguDenganGemini(namaLagu, artist, tipe, link) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
@@ -60,7 +60,7 @@ Jika tidak mengetahui lagu tersebut berikan jawaban dengan "Tidak Ada Informasi"
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  loader.style.display = "block"; 
+  loader.style.display = "block";
 
   const now = new Date();
   const yyyy = now.getFullYear();
@@ -75,19 +75,22 @@ form.addEventListener("submit", async (e) => {
     laguInput.value,
     artisInput.value,
     tipeInput.value,
-    linkInput.value,
+    linkInput.value
   );
   filterInput.value = hasilAI;
 
   fetch(scriptURL, { method: "POST", body: new FormData(form) })
     .then(() => {
-      alert("✅ Request berhasil dikirim!");
-      form.reset();
+      // alert("✅ Request berhasil dikirim!");
+      // document.getElementById("thankYouMessage").style.display = "block"; // Tampilkan pesan terima kasih
+      location.replace("thanks.html");
+      // location.href = "thanks.html";
+      // form.reset();
     })
     .catch((error) => {
       alert("❌ Gagal mengirim data: " + error.message);
     })
     .finally(() => {
-      loader.style.display = "none"; 
+      loader.style.display = "none";
     });
 });
